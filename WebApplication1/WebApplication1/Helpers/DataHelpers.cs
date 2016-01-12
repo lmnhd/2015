@@ -56,51 +56,61 @@ namespace RicoGMB.Helpers
         public static IEnumerable<RicoGMB.Helpers.IntsagramPost> GetInstagramPosts()
         {
             var result = new List<IntsagramPost>();
-            var request =
-                WebRequest.Create(
-                    "https://api.instagram.com/v1/users/305708595/media/recent/?client_id=4b8fdefedd1e437aad91cd3c11c87523");
-
-            WebResponse response = request.GetResponse();
-
-            var dataStream = response.GetResponseStream();
-            if (dataStream != null)
+            try
             {
-                var reader = new StreamReader(dataStream);
-                string data = reader.ReadToEnd();
-                dataStream.Close();
+                var request =
+                    WebRequest.Create(
+                        "https://api.instagram.com/v1/users/305708595/media/recent/?client_id=4b8fdefedd1e437aad91cd3c11c87523");
 
-                JObject obj = JObject.Parse(data);
+                WebResponse response = request.GetResponse();
 
-                if (obj != null)
+                var dataStream = response.GetResponseStream();
+                if (dataStream != null)
                 {
-                    var next = obj["pagination"]["next_url"].Value<string>();
-                    JArray posts =  JArray.FromObject(obj["data"]);
-                    foreach (JToken post in posts)
+                    var reader = new StreamReader(dataStream);
+                    string data = reader.ReadToEnd();
+                    dataStream.Close();
+
+                    JObject obj = JObject.Parse(data);
+
+                    if (obj != null)
                     {
-                        var image = post["images"]["thumbnail"]["url"].Value<string>();
-                        var caption = (string)post["caption"]["text"];
-                        long time = post["created_time"].Value<long>();
-                        DateTime startDate = new DateTime(1970, 1, 1);
-                        DateTime finalDateTime = startDate.AddSeconds(time);
-
-                        result.Add(new IntsagramPost()
+                        var next = obj["pagination"]["next_url"].Value<string>();
+                        JArray posts = JArray.FromObject(obj["data"]);
+                        foreach (JToken post in posts)
                         {
-                            Date = startDate,
-                            Type = ItemType.Instagram,
-                            Caption = caption,
-                            DateString = startDate.Subtract(DateTime.Now).Hours.ToString(new NumberFormatInfo()) + "Hours Ago",
-                            PhotoLink = image,
-                            UseOnHomePage = true
+                            var image = post["images"]["thumbnail"]["url"].Value<string>();
+                            var caption = (string) post["caption"]["text"];
+                            long time = post["created_time"].Value<long>();
+                            DateTime startDate = new DateTime(1970, 1, 1);
+                            DateTime finalDateTime = startDate.AddSeconds(time);
 
-                        });
+                            result.Add(new IntsagramPost()
+                            {
+                                Date = startDate,
+                                Type = ItemType.Instagram,
+                                Caption = caption,
+                                DateString =
+                                    startDate.Subtract(DateTime.Now).Hours.ToString(new NumberFormatInfo()) +
+                                    "Hours Ago",
+                                PhotoLink = image,
+                                UseOnHomePage = true
 
-                    }
-                   
-                   
+                            });
 
-                 
+                        }
+
+
+
+
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                
+            }
+            
             return result;
         }
 

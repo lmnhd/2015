@@ -13,7 +13,12 @@ namespace RicoGMB.Controllers
   
     public class HomeController : Controller
     {
-        
+        private RicoWorkUnit _unit;
+
+        public HomeController()
+        {
+            _unit = new RicoWorkUnit();
+        }
        
         public ActionResult Index()
         {
@@ -30,11 +35,11 @@ namespace RicoGMB.Controllers
             //ViewBag.news = RicoWorkUnit.GetNewses();
             var instagramlist = RicoGMB.Helpers.DataHelpers.GetInstagramPosts();
             var hpList = new List<IItemContainer>();
-            hpList.AddRange(RicoWorkUnit.GEtMixtapes());
-            hpList.AddRange(RicoWorkUnit.GetAlbums());
-            hpList.AddRange(RicoWorkUnit.GetEvents());
-            hpList.AddRange(RicoWorkUnit.GetNewses());
-            hpList.AddRange(RicoWorkUnit.GetTracks());
+            hpList.AddRange(_unit.GEtMixtapes());
+            hpList.AddRange(_unit.GetAlbums());
+            hpList.AddRange(_unit.GetEvents());
+            hpList.AddRange(_unit.GetNewses());
+            hpList.AddRange(_unit.GetTracks());
             hpList.AddRange(RicoGMB.Helpers.DataHelpers.GetYouTubePlaylist());
             hpList.AddRange(instagramlist);
            hpList.Sort(new ItemSorter());
@@ -49,7 +54,9 @@ namespace RicoGMB.Controllers
                 albums = new List<IItemContainer>(),
                 events = new List<IItemContainer>(),
                 newses = new List<IItemContainer>(),
-                instagrams = new List<IItemContainer>()
+                instagrams = new List<IItemContainer>(),
+                globals = _unit.GetGlobals()
+
 
             };
             foreach (IItemContainer container in hpList)

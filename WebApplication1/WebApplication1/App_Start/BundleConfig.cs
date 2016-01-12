@@ -22,7 +22,7 @@ namespace RicoGMB
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                "~/Scripts/knockout-{version}.js",
                "~/Scripts/knockout.validation.js",
-               "~/Scripts/sammy-0.7.4.js",
+               
                "~/Scripts/dustjs-master/dist/dust-core-0.3.0.min.js",
                "~/Scripts/dustjs-master/dist/dust-full-0.3.0.min.js"));
 

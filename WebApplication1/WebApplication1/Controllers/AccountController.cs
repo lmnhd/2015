@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using RicoGMB.Context;
 using RicoGMB.Models;
 using RicoGMB;
 
@@ -16,15 +17,19 @@ namespace RicoGMB.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private RicoWorkUnit _unit;
 
         public AccountController()
         {
+            _unit = new RicoWorkUnit();
+
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _unit = new RicoWorkUnit();
         }
 
         public ApplicationSignInManager SignInManager
@@ -164,8 +169,12 @@ namespace RicoGMB.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Hometown = model.Hometown };
                 var result = await UserManager.CreateAsync(user, model.Password);
+
+
                 if (result.Succeeded)
                 {
+                    UserManager.AddToRole(user.Id, "Users");
+                    //_unit.StoreClient(user.Id, user.UserName, user.Hometown);
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771

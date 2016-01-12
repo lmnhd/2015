@@ -7,47 +7,58 @@ using RicoGMB.Context.Entities;
 
 namespace RicoGMB.Context
 {
-    public static class RicoWorkUnit
+    public  class RicoWorkUnit : IDisposable
     {
-        private static RicoContext _context;
+        private   RicoContext _context;
 
-         static RicoWorkUnit()
+         public RicoWorkUnit()
         {
             _context = new RicoContext();
         }
 
-        public static int StoreAlbum(Album album)
+         public  ArtistGlobals GetGlobals()
+         {
+             return _context._Globals.FirstOrDefault();
+         }
+
+        public  void UpdateGlobals(ArtistGlobals global)
+        {
+            _context.Entry(global).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
+
+        public  int StoreAlbum(Album album)
         {
             _context._Albums.Add(album);
             _context.SaveChanges();
             return album.Id;
         }
-        public static int StoreMixtape(Mixtape mixtape)
+        public  int StoreMixtape(Mixtape mixtape)
         {
             _context._Mixtapes.Add(mixtape);
             _context.SaveChanges();
             return mixtape.Id;
         }
-        public static int StoreTrack(Track track)
+        public  int StoreTrack(Track track)
         {
             _context._Tracks.Add(track);
             _context.SaveChanges();
             return track.Id;
         }
-        public static int StoreAlbum(Event newEvent)
+        public  int StoreAlbum(Event newEvent)
         {
             _context._Events.Add(newEvent);
             _context.SaveChanges();
             return newEvent.Id;
         }
-        public static int StoreNews(News news)
+        public  int StoreNews(News news)
         {
             _context._Newses.Add(news);
             _context.SaveChanges();
             return news.Id;
         }
 
-        public static int UpdateItem(IItemContainer data)
+        public  int UpdateItem(IItemContainer data)
         {
             var result = 0;
             switch (data.Type)
@@ -88,29 +99,50 @@ namespace RicoGMB.Context
             return result;
         }
 
-        public static IEnumerable<Album> GetAlbums()
+        public  IEnumerable<Album> GetAlbums()
         {
             return _context._Albums;
         }
 
-        public static IEnumerable<Mixtape> GEtMixtapes()
+        public  IEnumerable<Mixtape> GEtMixtapes()
         {
             return _context._Mixtapes;
         }
 
-        public static IEnumerable<Track> GetTracks()
+        public  IEnumerable<Track> GetTracks()
         {
             return _context._Tracks.Include(t => t.Album);
         }
 
-        public static IEnumerable<Event> GetEvents()
+        public  IEnumerable<Event> GetEvents()
         {
             return _context._Events;
         }
 
-        public static IEnumerable<News> GetNewses()
+        public  IEnumerable<News> GetNewses()
         {
             return _context._Newses;
-        } 
+        }
+
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
     }
 }

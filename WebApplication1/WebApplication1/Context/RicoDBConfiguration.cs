@@ -5,10 +5,11 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using RicoGMB.Context.Entities;
+using RicoGMB.Controllers;
 
 namespace RicoGMB.Context
 {
-    public class RicoDBConfiguration : DropCreateDatabaseIfModelChanges<RicoContext>
+    public class RicoDBConfiguration : DropCreateDatabaseAlways<RicoContext>
     {
         protected override void Seed(RicoContext context)
         {
@@ -19,6 +20,15 @@ namespace RicoGMB.Context
             context._Mixtapes.AddRange(getMixtapes());
             context._Newses.AddRange(getNewses());
             context._Tracks.AddRange(geTracks());
+            context._Globals.Add(new ArtistGlobals
+            {
+                Address = "921 3rd Street Neptune Beach FL 32266",
+                Booking = "904-568-2068",
+                Email = "GMBENT223@gmail.com",
+                ArtistName = "Rico Irvin",
+                Facebook = "Rico GMB Irvin IG",
+                Twitter = "RicoGMB@Twitter"
+            });
             context.SaveChanges();
 
             base.Seed(context);
@@ -88,8 +98,10 @@ namespace RicoGMB.Context
                   PhotoLink = "https://scontent.cdninstagram.com/hphotos-xaf1/t51.2885-15/e15/11015646_1557143487897220_2082517329_n.jpg",
                  Price = 0,
                  UseOnHomePage = true,
-                 ExtraInfo = "",
-                Type = ItemType.Event
+                 ExtraInfo = "Please contact 904-555-1212 for availabilty!",
+                Type = ItemType.Event,
+                FullLink = "http://google.com"
+                
                    
                 },
                 new Event()

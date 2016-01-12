@@ -16,7 +16,7 @@ namespace RicoGMB.Context.Entities
         public virtual string ExtraInfo { get; set; }
         public virtual decimal Price { get; set; }
         public virtual string PhotoLink { get; set; }
-
+        public virtual string FullLink { get; set; }
         public virtual ItemType Type { get; set; }
         public virtual bool UseOnHomePage { get; set; }
         [NotMapped]

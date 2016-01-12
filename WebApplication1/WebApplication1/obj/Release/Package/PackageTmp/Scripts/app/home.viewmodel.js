@@ -48,16 +48,25 @@
         self.myHometown = ko.observable("");
 
     Sammy(function () {
-        //this.disable_push_state = true;
-
-
+        this.disable_push_state = true;
         this.get('#home', function () {
             //$('#body-wrap').show();
             self.resetView();
             $(window).scrollTo(0);
 
 
-            
+            // Make a call to the protected Web API by passing in a Bearer Authorization Header
+            //$.ajax({
+            //    method: 'get',
+            //    url: app.dataModel.userInfoUrl,
+            //    contentType: "application/json; charset=utf-8",
+            //    headers: {
+            //        'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
+            //    },
+            //    success: function (data) {
+            //        self.myHometown('Your Hometown is : ' + data.hometown);
+            //    }
+            //});
         });
         this.get('/', function () { this.app.runRoute('get', '#home'); });
 
@@ -132,48 +141,7 @@
 
             }
         });
-        this.get('#user', function () {
 
-            var thisapp = this.app;
-            if (!dataModel.getAccessToken()) {
-                // The following code looks for a fragment in the URL to get the access token which will be
-                // used to call the protected Web API resource
-                var fragment = common.getFragment();
-
-                if (fragment.access_token) {
-                    // returning with access token, restore old hash, or at least hide token
-
-                    window.location.hash = fragment.state || '';
-                    dataModel.setAccessToken(fragment.access_token);
-                } else {
-                    //no token - so bounce to Authorize endpoint in AccountController to sign in or register
-                    window.location = "/Account/Authorize?client_id=web&response_type=token&state=" + encodeURIComponent(window.location.hash);
-                }
-            } else {
-                $.ajax({
-                    method: 'get',
-                    url: app.dataModel.clientInfoUrl,
-                    contentType: "application/json; charset=utf-8",
-                    headers: {
-                        'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-                    },
-                    success: function (data) {
-                        
-
-                        //self.currentRequest().setClientUserId(data.userId);
-                        //self.currentRequest().setClientId(data.clientId);
-
-                        thisapp.runRoute('get', '#home/');
-                        //self.myHometown('Your Hometown is : ' + data.hometown);
-                        //self.welcomeMessage("Welcome " + data.userName);
-
-                    }
-                });
-
-            }
-
-
-        });
         this.get('#/page/:page', function() {
             var page = this.params['page'];
             var obj = {};
@@ -215,51 +183,6 @@
                 case 'gmbfamily':
                     break;
                 case 'fans':
-
-                    var thisapp = this.app;
-                    if (!dataModel.getAccessToken()) {
-                        // The following code looks for a fragment in the URL to get the access token which will be
-                        // used to call the protected Web API resource
-                        var fragment = common.getFragment();
-
-                        if (fragment.access_token) {
-                            // returning with access token, restore old hash, or at least hide token
-                            alert(fragment.access_token);
-                            window.location.hash = fragment.state || '';
-                            dataModel.setAccessToken(fragment.access_token);
-                        } else {
-                            //no token - so bounce to Authorize endpoint in AccountController to sign in or register
-                            window.location = "/Account/Authorize?client_id=web&response_type=token&state=" + encodeURIComponent(window.location.hash);
-                        }
-                    } else {
-                        $.ajax({
-                            method: 'get',
-                            url: app.dataModel.clientInfoUrl,
-                            contentType: "application/json; charset=utf-8",
-                            headers: {
-                                'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-                            },
-                            success: function (data) {
-
-
-
-                                //self.currentRequest().setClientUserId(data.userId);
-                                //self.currentRequest().setClientId(data.clientId);
-                                thisapp.runRoute('get', '#home');
-                                // app.home();
-                                //this.runRoute('get', '#home');
-                                //self.myHometown('Your Hometown is : ' + data.hometown);
-                                //self.welcomeMessage("Welcome " + data.userName);
-
-                            }
-                        });
-
-                    }
-
-
-
-                   // self.GetTokenOrLogIn(function () { });
-                    //this.runRoute('get', '#home');
                     break;
                 
 
@@ -296,7 +219,7 @@
        
         //});
     });
-    
+
     self.toggleTitleContent = function (on) {
         if (on) {
             $('.title-content').show();
@@ -310,68 +233,6 @@
        
 
 
-    }
-
-    self.GetTokenOrLogIn = function (callback) {
-
-        if (!dataModel.getAccessToken()) {
-            // The following code looks for a fragment in the URL to get the access token which will be
-            // used to call the protected Web API resource
-            var fragment = common.getFragment();
-
-            if (fragment.access_token) {
-                // returning with access token, restore old hash, or at least hide token
-                alert(fragment.access_token);
-                window.location.hash = fragment.state || '';
-                dataModel.setAccessToken(fragment.access_token);
-            } else {
-                //no token - so bounce to Authorize endpoint in AccountController to sign in or register
-                window.location = "/Account/Authorize?client_id=web&response_type=token&state=" + encodeURIComponent(window.location.hash);
-            }
-        } else {
-            $.ajax({
-                method: 'get',
-                url: app.dataModel.clientInfoUrl,
-                contentType: "application/json; charset=utf-8",
-                headers: {
-                    'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-                },
-                success: function (data) {
-                    
-                    
-
-                    //self.currentRequest().setClientUserId(data.userId);
-                    //self.currentRequest().setClientId(data.clientId);
-                    app.home();
-                    //this.runRoute('get', '#home');
-                    //self.myHometown('Your Hometown is : ' + data.hometown);
-                    //self.welcomeMessage("Welcome " + data.userName);
-
-                }
-            });
-
-        }
-
-
-
-
-
-       // app.CheckUserState(callback);
-
-        // Make a call to the protected Web API by passing in a Bearer Authorization Header
-    //    $.ajax({
-    //        method: 'get',
-    //        url: app.dataModel.userInfoUrl,
-    //        contentType: "application/json; charset=utf-8",
-    //        headers: {
-    //            'Authorization': 'Bearer ' + app.dataModel.getAccessToken()
-    //        },
-    //        success: function (data) {
-    //            if (callback) {
-    //                callback();
-    //            }
-    //        }
-    //    });
     }
     return self;
 }

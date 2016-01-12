@@ -58,16 +58,10 @@
 
     window.dusttpl.registerAll();
 
-    var obj = $.parseJSON($('#dataobj').text());
-
-    window.alldata = obj;
-    for (var i = 0; i < window.alldata.videos.length; i++) {
-        var vid = window.alldata.videos[i];
-        vid.thumbnail = vid.ThumbnailsList[0];
-    }
+    $('#sidebar-events').css('height', $('#content-area').height());
 
 
-    // var buildingTemplate = dust.compile($("#building-list-item-template").html(), "tpl");
+// var buildingTemplate = dust.compile($("#building-list-item-template").html(), "tpl");
 
     // load the compiled template into the dust template cache
     //dust.loadSource(buildingTemplate);

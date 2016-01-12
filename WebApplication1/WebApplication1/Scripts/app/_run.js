@@ -1,4 +1,5 @@
 ﻿$(function () {
+   
     app.initialize();
 
     // Activate Knockout

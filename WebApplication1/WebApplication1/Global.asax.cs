@@ -1,10 +1,12 @@
 ﻿using System.Data.Entity;
+using System.Runtime.InteropServices;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using RicoGMB;
 using RicoGMB.Context;
+using RicoGMB.Models;
 
 namespace RicoGMB
 {
@@ -21,7 +23,12 @@ namespace RicoGMB
 
             var cntx = new RicoContext();
             Database.SetInitializer(new RicoDBConfiguration());
-            cntx.Database.Initialize(false);
+           
+            cntx.Database.Initialize(true);
+           
+            //cntx.Database.Initialize(true);
+           // var appcontext = new ApplicationDbContext();
+           
         }
     }
 }
